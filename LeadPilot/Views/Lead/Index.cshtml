@@ -1,0 +1,62 @@
+﻿@{
+    ViewData["Title"] = "Lead";
+}
+
+<div class="text-center">
+    <a class="btn btn-primary" href="Lead/CreateLead">Create Lead</a>
+</div>
+
+<div>
+    <table id="LeadDt">
+        <thead>
+            <tr>
+                <th class="d-none">Id</th>
+                <th class="col-1">Company Name</th>
+                <th class="col-1">Email</th>
+                <th class="col-1">City</th>
+                <th class="col-1">Source</th>
+                <th class="col-1">Status</th>
+                <th class="col-1">Action</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function(){
+            GetLeadData();
+        });
+
+        function GetLeadData(){
+            $('#LeadDt').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax:{
+                    url:'Lead/GetAllLeads',
+                    type:'POST',
+                    data:function(d){
+                        return {
+                            PageIndex:(d.start/d.length)+1,
+                            PageSize:d.length
+                        }
+                    }
+                },
+                columns:[
+                    {data:'id',visible:false},
+                    {data:'companyName'},
+                    {data:'emailId'},
+                    {data:'city'},
+                    {data:'source'},
+                    {data:'status'},
+                    {
+                        render:function(data,type,row){
+                            return `<a class="btn btn-info" href="Lead/Open?id=`+row.id+`">Edit</a>`;
+                        }
+                    }
+                ]
+            });
+        }
+    </script>
+}

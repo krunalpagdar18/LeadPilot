@@ -1,0 +1,87 @@
+﻿@model LeadPilot.ViewModels.LeadViewModel;
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="">
+    <h1>Enter Details</h1>
+<form id="leadForm">
+        @Html.HiddenFor(Model => Model.Lead.Id)
+        <div class="row">
+            <div class="col-md-4 form-group">
+                <label class="control-label">Company Name<span class="text-danger ml-5">*</span></label>
+                @Html.EditorFor(Model => Model.Lead.CompanyName, new { htmlAttributes = new { @class = "form-control", placeholder = "Company Name", @maxlength = "100", required = "required", title = "Company Name is required" } })
+            </div>
+            <div class="col-md-4 form-group">
+                <label>Contact Name<span class="text-danger ml-5">*</span></label>
+                @Html.EditorFor(Model => Model.Lead.ContactName, new { htmlAttributes = new { @class = "form-control", placeholder = "Contact Name", @maxlength = "100", required = "required", title = "Contact Name is required" } })
+            </div>
+            <div class="col-md-4">
+                <label>Email<span class="text-danger ml-5">*</span></label>
+                @Html.EditorFor(Model => Model.Lead.EmailId, new { htmlAttributes = new { @class = "form-control", placeholder = "Email ID", @maxlength = "100", required = "required", title = "Email ID is required" } })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label>Website<span class="text-danger ml-5">*</span></label>
+                @Html.EditorFor(Model => Model.Lead.Website, new { htmlAttributes = new { @class = "form-control", placeholder = "Website", @maxlength = "100", required = "required", title = "Website is required" } })
+            </div>
+            <div class="col-md-6">
+                <label>City<span class="text-danger ml-5">*</span></label>
+                @Html.EditorFor(Model => Model.Lead.City, new { htmlAttributes = new { @class = "form-control", placeholder = "City", @maxlength = "100", required = "required", title = "City is required" } })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label>Lead Source<span class="text-danger ml-5">*</span></label>
+                @Html.DropDownListFor(Model => Model.Lead.SourceId, new SelectList(Model.LeadSource,"Id","Name"), "Select Lead Source", new { @class = "form-control", @id = "ddlleadSource" })
+            </div>
+            <div class="col-md-6">
+                <label>Lead Status<span class="text-danger ml-5">*</span></label>
+                @Html.DropDownListFor(Model => Model.Lead.StatusId, new SelectList(Model.LeadStatus, "Id", "Name"), "Select Lead Status", new { @class = "form-control", @id = "ddlleadStatus" })
+            </div>
+        </div>
+        <div class="row" style="margin-top:10px;">
+            <a class="btn btn-success col-md-1" type="button" onclick="SubmitLead()">Submit</a>
+            <a class="btn btn-secondary col-md-1 offset-md-1" type="button" href="Lead/">Cancel</a>
+        </div>
+</form>
+</div>
+
+
+<script>
+    function SubmitLead(){
+        if(!$('#leadForm').valid()){
+            alert('Please fill all mandatory fields');
+            return false;
+        }
+
+        var lead={};
+        lead.Id=parseInt($('#Lead_Id').val())||0;
+        lead.CompanyName=$('#Lead_CompanyName').val();
+        lead.ContactName=$('#Lead_ContactName').val();
+        lead.EmailId=$('#Lead_EmailId').val();
+        lead.Website=$('#Lead_Website').val();
+        lead.City=$('#Lead_City').val();
+        lead.SourceID=parseInt($('#ddlleadSource').val());
+        lead.StatusID=parseInt($('#ddlleadStatus').val());
+
+
+        $.ajax({
+                type: "POST",
+                url: 'Lead/AddUpdateLead',
+                dataType: 'JSON',
+                traditional: true,
+                data: JSON.stringify(lead),
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    alert(data.message)
+                    window.location.href="Lead/"
+                },
+                error: function (data) {
+                    alert('error Occured')
+                }
+            });
+    }
+</script>
