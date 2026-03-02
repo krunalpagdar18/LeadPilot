@@ -32,16 +32,29 @@
                 @Html.EditorFor(Model => Model.Lead.City, new { htmlAttributes = new { @class = "form-control", placeholder = "City", @maxlength = "100", required = "required", title = "City is required" } })
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <label>Lead Source<span class="text-danger ml-5">*</span></label>
-                @Html.DropDownListFor(Model => Model.Lead.SourceId, new SelectList(Model.LeadSource,"Id","Name"), "Select Lead Source", new { @class = "form-control", @id = "ddlleadSource" })
+        @if (Model.Lead==null || Model.Lead.Id == 0)
+            {
+            <div class="row">
+                <div class="col-md-12">
+                    <label>Lead Source<span class="text-danger ml-5">*</span></label>
+                    @Html.DropDownListFor(Model => Model.Lead.SourceId, new SelectList(Model.LeadSource, "Id", "Name"), "Select Lead Source", new { @class = "form-control", @id = "ddlleadSource" })
+                </div>
             </div>
-            <div class="col-md-6">
-                <label>Lead Status<span class="text-danger ml-5">*</span></label>
-                @Html.DropDownListFor(Model => Model.Lead.StatusId, new SelectList(Model.LeadStatus, "Id", "Name"), "Select Lead Status", new { @class = "form-control", @id = "ddlleadStatus" })
+            }
+            else
+            {
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Lead Source<span class="text-danger ml-5">*</span></label>
+                    @Html.DropDownListFor(Model => Model.Lead.SourceId, new SelectList(Model.LeadSource, "Id", "Name"), "Select Lead Source", new { @class = "form-control", @id = "ddlleadSource" })
+                </div>
+                <div class="col-md-6">
+                    <label>Lead Status<span class="text-danger ml-5">*</span></label>
+                    @Html.DropDownListFor(Model => Model.Lead.StatusId, new SelectList(Model.LeadStatus, "Id", "Name"), "Select Lead Status", new { @class = "form-control", @id = "ddlleadStatus" })
+                </div>
             </div>
-        </div>
+            }
+            
         <div class="row" style="margin-top:10px;">
             <a class="btn btn-success col-md-1" type="button" onclick="SubmitLead()">Submit</a>
             <a class="btn btn-secondary col-md-1 offset-md-1" type="button" href="Lead/">Cancel</a>

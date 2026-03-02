@@ -14,7 +14,7 @@
 
         public int SourceId { get; set; }
 
-        public int StatusId { get; set; }
+        public int? StatusId { get; set; }
 
         public string EmailId { get; set; }
     }

@@ -74,7 +74,7 @@ namespace LeadPilot.Service
 
         public async Task<ResponseViewModel<bool>> SendInitialEmail(Lead leadDetails)
         {
-            var emailTemplate = await _context.EmailTemplates.AsNoTracking().Where(x => x.EmailTypeId == (int)EmailTypeEnum.Initial && x.SouceId == leadDetails.SourceId).FirstOrDefaultAsync();
+            var emailTemplate = await _context.EmailTemplates.AsNoTracking().Where(x => x.EmailTypeId == (int)EmailTypeEnum.Initial && (x.SouceId == leadDetails.SourceId || x.SouceId==null)).OrderByDescending(x=>x.SouceId).FirstOrDefaultAsync();
 
             var subject = emailTemplate.Subject;
             var body = emailTemplate.Body;
