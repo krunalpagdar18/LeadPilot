@@ -3,6 +3,7 @@ using System;
 using LeadPilot.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LeadPilot.Migrations
 {
     [DbContext(typeof(LeadPilotDbContext))]
-    partial class LeadPilotDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260302141548_InitialEMailTemplateMigration")]
+    partial class InitialEMailTemplateMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,10 +73,20 @@ namespace LeadPilot.Migrations
                         {
                             Id = 1,
                             Active = true,
-                            Body = "<p>Hi@ContactName,</p><p> I came across @FirmName while researching businesses in @City and wanted to reach out.</p><p> Quick question — are you currently exploring ways to improve internal workflows or automate any repetitive processes?</p><p>I build custom tools and automations that help teams save time and reduce manual work.</p><p>No sales pitch — just curious if this is something on your radar.</p><p style = \"margin-top:25px;\">Best regards,  <br/>Krunal</p>",
+                            Body = "<p>Hi@ContactName,</p>< p > I came across @FirmName while researching businesses in @City and wanted to reach out.</ p >< p > Quick question — are you currently exploring ways to improve internal workflows or automate any repetitive processes?</p><p>I build custom tools and automations that help teams save time and reduce manual work.</p><p>No sales pitch — just curious if this is something on your radar.</p><p style = \"margin-top:25px;\">Best regards,  <br/>Krunal</p>",
                             EmailTypeId = 1,
                             Name = "Initial",
                             Subject = "Quick question about your internal workflows"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Active = false,
+                            Body = "<p>Hi@ContactName,</p>\r\n\r\n<p>I came across @FirmName while reviewing accounting firms listed on Hotfrog and wanted to reach out directly. I work with professional services firms to improve internal systems and streamline day-to-day operations.</p>\r\n\r\n<p>If improving internal efficiency is something you’re exploring this year, I’d be happy to have a quick conversation.</p>\r\n\r\n<p style=\"margin-top:25px;\">\r\nBest regards,<br/>\r\nKrunal Pagdar<br/>\r\nFull-Stack Developer (.NET | Azure)\r\n</p>",
+                            EmailTypeId = 1,
+                            Name = "HotFrog - Initial",
+                            SouceId = 2,
+                            Subject = "Quick question after finding @FirmName on Hotfrog"
                         },
                         new
                         {
