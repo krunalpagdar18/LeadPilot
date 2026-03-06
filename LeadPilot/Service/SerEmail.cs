@@ -31,7 +31,7 @@ namespace LeadPilot.Service
         {
             var fromEmail = _fromEmail;
             var password = _passKey;
-            MailAddress fromAddress = new MailAddress(fromEmail);
+            MailAddress fromAddress = new MailAddress(fromEmail,"Krunal Pagdar");
             SmtpClient smtpClient = new SmtpClient();
             smtpClient.Host = "smtp.gmail.com";
             smtpClient.Port = 587;
