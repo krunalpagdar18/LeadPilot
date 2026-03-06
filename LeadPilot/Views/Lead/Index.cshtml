@@ -1,8 +1,43 @@
-﻿@{
+﻿@using LeadPilot.Enum
+
+@{
     ViewData["Title"] = "Lead";
 }
 
-<div class="text-center">
+<style>
+    .edit{
+        color: #bfa41b !important;
+    }
+
+    .delete{
+        color: #a8271e !important;
+        margin-left:5px;
+        cursor: pointer;
+    }
+
+    .replied {
+        color: #0D6EFD !important;
+        margin-left:5px;
+        cursor: pointer;
+    }
+
+    .closed {
+        color: #198754 !important;
+        margin-left: 5px;
+        cursor: pointer;
+    }
+
+
+    .doNotContact {
+        color: #DC3545 !important;
+        margin-left:5px;
+        cursor: pointer;
+    }
+
+
+</style>
+
+<div class="d-flex justify-content-end" style="margin-bottom:10px">
     <a class="btn btn-primary" href="Lead/CreateLead">Create Lead</a>
 </div>
 
@@ -52,10 +87,58 @@
                     {data:'status'},
                     {
                         render:function(data,type,row){
-                            return `<a class="btn btn-info" href="Lead/Open?id=`+row.id+`">Edit</a>`;
+                            return `<a class="edit" href="Lead/Open?id=`+row.id+`"><i class="fa-solid fa-pen"></i></a>`+
+                                    `<a class="delete" onclick="deleteLead(`+row.id+`)"><i class="fa-solid fa-trash"></i></a>`+
+                                    `<a class="replied" onclick="updateLeadStatus(`+row.id+`,'@LeadStatusEnum.Replied')"><i class="fa-solid fa-envelope-open-text"></i></a>`+
+                                    `<a class="closed" onclick="updateLeadStatus(`+row.id+`,'@LeadStatusEnum.Closed')"><i class="fa-solid fa-circle-check"></i></a>`+
+                                    `<a class="doNotContact" onclick="updateLeadStatus(`+row.id+`,'@LeadStatusEnum.DoNotContact')"><i class="fa-solid fa-ban"></i></a>`;
                         }
                     }
                 ]
+            });
+        }
+
+        function deleteLead(id){
+            $.ajax({
+                type: "DELETE",
+                url: 'Lead/DeleteLead?id='+id,
+                dataType: 'JSON',
+                traditional: true,
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if(data.status){
+                        window.location.href="Lead/"
+                    }else{
+                        alert(data.ErrorMessage)
+                    }
+                    
+                    
+                },
+                error: function (data) {
+                    alert('error Occured')
+                }
+            });
+        }
+
+        function updateLeadStatus(id,type){
+            $.ajax({
+                type: "PUT",
+                url: 'Lead/UpdateLeadStatus?id='+id+'&status='+type,
+                dataType: 'JSON',
+                traditional: true,
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if(data.status){
+                        window.location.href="Lead/"
+                    }else{
+                        alert(data.ErrorMessage)
+                    }
+
+
+                },
+                error: function (data) {
+                    alert('error Occured')
+                }
             });
         }
     </script>

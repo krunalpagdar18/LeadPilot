@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LeadPilot.Enum;
 using LeadPilot.Models;
 using LeadPilot.Profiles;
 using LeadPilot.Service;
@@ -38,10 +39,8 @@ namespace LeadPilot.Controllers
         {
             var leadVM=new LeadViewModel();
             var leadSource = await _serLeadSource.GetLeadSource();
-            var leadStatus = await _serLeadStatus.GeLeadStatus();
 
             leadVM.LeadSource = leadSource.responseData;
-            leadVM.LeadStatus = leadStatus.responseData;
             return View("AddUpdate", leadVM);
         }
 
@@ -52,10 +51,8 @@ namespace LeadPilot.Controllers
             leadVm.Lead = lead.responseData;
 
             var leadSource = await _serLeadSource.GetLeadSource();
-            var leadStatus = await _serLeadStatus.GeLeadStatus();
 
             leadVm.LeadSource = leadSource.responseData;
-            leadVm.LeadStatus = leadStatus.responseData;
             return View("AddUpdate", leadVm);
         }
 
@@ -108,6 +105,31 @@ namespace LeadPilot.Controllers
             var leadData= await _serLead.GetLeads(paginationViewModel);
 
             return Json(leadData.responseData);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteLead([FromQuery]int id)
+        {
+            var isDeleted=await _serLead.DeleteLead(id);
+            return Json(isDeleted);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateLeadStatus([FromQuery] int id, [FromQuery] string status)
+        {
+            LeadStatusEnum leadStatus;
+            if(System.Enum.TryParse(status, true, out leadStatus))
+            {
+                var leadDetails = await _serLead.GetLeadByID(id);
+                leadDetails.responseData.StatusId = (int)leadStatus;
+
+                await _serLead.UpdateLead(leadDetails.responseData);
+                return Ok(new ResponseViewModel<bool>(true));
+            }
+            else
+            {
+                throw new Exception("Invalid Status");
+            }
         }
     }
 }

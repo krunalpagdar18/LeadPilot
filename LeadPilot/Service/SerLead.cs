@@ -17,6 +17,7 @@ namespace LeadPilot.Service
         {
             lead.StatusId = (int?)LeadStatusEnum.New;
             lead.AddedOn = DateOnly.FromDateTime(DateTime.Now);
+            lead.Inactive = false;
             var newLead = _context.Leads.Add(lead);
             await _context.SaveChangesAsync();
 
@@ -25,14 +26,32 @@ namespace LeadPilot.Service
 
         public async Task<ResponseViewModel<string>> UpdateLead(Lead lead)
         {
+            lead.Inactive = false;
             _context.Entry(lead).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return new ResponseViewModel<string>("Lead updated");
         }
 
+        public async Task<ResponseViewModel<bool>> DeleteLead(int ID)
+        {
+           var lead= await _context.Leads.Where(x => x.Id == ID && x.Inactive == false).FirstOrDefaultAsync();
+            if (lead == null)
+            {
+                throw new Exception("Lead not found");
+            }
+
+
+            lead.Inactive = true;
+            lead.InactiveDate= DateTime.Now;
+
+            await _context.SaveChangesAsync();
+
+            return new ResponseViewModel<bool>(true);
+        }
+
         public async Task<ResponseViewModel<Lead>> GetLeadByID(int ID)
         {
-            var lead = await _context.Leads.Where(x => x.Id == ID).FirstOrDefaultAsync();
+            var lead = await _context.Leads.Where(x => x.Id == ID && x.Inactive==false).FirstOrDefaultAsync();
             if (lead == null)
             {
                 throw new Exception("Lead not found");
@@ -43,6 +62,7 @@ namespace LeadPilot.Service
         public async Task<ResponseViewModel<ListViewModel<List<LeadListViewModel>>>> GetLeads(PaginationViewModel LeadPageVM)
         {
             var leadListdata = await _context.Leads.Include(x => x.Source).Include(x => x.Status).AsNoTracking()
+                                    .Where(x=>x.Inactive==false)
                                     .Skip((LeadPageVM.PageIndex - 1) * LeadPageVM.PageSize).Take(LeadPageVM.PageSize)
                                     .Select(x => new LeadListViewModel()
                                     {
@@ -54,7 +74,7 @@ namespace LeadPilot.Service
                                         Status = x.Status.Name
                                     }).ToListAsync();
 
-            var totalCount = await _context.Leads.Include(x => x.Source).Include(x => x.Status).AsNoTracking().CountAsync();
+            var totalCount = await _context.Leads.Include(x => x.Source).Include(x => x.Status).AsNoTracking().Where(x=>x.Inactive==false).CountAsync();
 
             var lstData = new ListViewModel<List<LeadListViewModel>>()
             {

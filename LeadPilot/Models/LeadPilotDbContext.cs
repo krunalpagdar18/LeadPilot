@@ -1,8 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace LeadPilot.Models;
 
@@ -79,6 +77,8 @@ public partial class LeadPilotDbContext : DbContext
                 .UseIdentityAlwaysColumn()
                 .HasColumnName("ID");
             entity.Property(e => e.EmailId).HasColumnName("EmailID");
+            entity.Property(e => e.Inactive).HasDefaultValue(false);
+            entity.Property(e => e.InactiveDate).HasColumnType("timestamp without time zone");
             entity.Property(e => e.SourceId).HasColumnName("SourceID");
             entity.Property(e => e.StatusId).HasColumnName("StatusID");
 

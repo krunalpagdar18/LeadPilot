@@ -6,6 +6,5 @@ namespace LeadPilot.ViewModels
     {
         public Lead Lead { get; set; }
         public List<LeadSource> LeadSource { get; set; }
-        public List<LeadStatus> LeadStatus { get; set; }
     }
 }
