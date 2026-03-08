@@ -61,8 +61,23 @@ namespace LeadPilot.Service
 
         public async Task<ResponseViewModel<ListViewModel<List<LeadListViewModel>>>> GetLeads(PaginationViewModel LeadPageVM)
         {
-            var leadListdata = await _context.Leads.Include(x => x.Source).Include(x => x.Status).AsNoTracking()
-                                    .Where(x=>x.Inactive==false)
+            var query = _context.Leads.Include(x => x.Source).Include(x => x.Status).AsNoTracking()
+                                    .Where(x => x.Inactive == false);
+
+            if (!string.IsNullOrEmpty(LeadPageVM.SearchText))
+            {
+                var search = $"%{LeadPageVM.SearchText}%";
+
+                query = query.Where(x=>EF.Functions.ILike(x.CompanyName,search)
+                                || EF.Functions.ILike(x.City, search)
+                                || EF.Functions.ILike(x.EmailId, search)
+                                || EF.Functions.ILike(x.Source.Name, search)
+                                || EF.Functions.ILike(x.Status.Name, search)
+                            );
+            }
+
+            var leadListdata = await query
+                                    .OrderByDescending(x=>x.AddedOn)
                                     .Skip((LeadPageVM.PageIndex - 1) * LeadPageVM.PageSize).Take(LeadPageVM.PageSize)
                                     .Select(x => new LeadListViewModel()
                                     {
@@ -71,16 +86,17 @@ namespace LeadPilot.Service
                                         City = x.City,
                                         EmailId = x.EmailId,
                                         Source = x.Source.Name,
-                                        Status = x.Status.Name
+                                        Status = x.Status.Name,
+                                        AddedOn=x.AddedOn
                                     }).ToListAsync();
 
-            var totalCount = await _context.Leads.Include(x => x.Source).Include(x => x.Status).AsNoTracking().Where(x=>x.Inactive==false).CountAsync();
+            var totalCount = await query.CountAsync();
 
             var lstData = new ListViewModel<List<LeadListViewModel>>()
             {
                 data = leadListdata,
                 recordsTotal = totalCount,
-                recordsFiltered = totalCount
+                recordsFiltered = leadListdata?.Count??0
             };
 
             return new ResponseViewModel<ListViewModel<List<LeadListViewModel>>>(lstData);

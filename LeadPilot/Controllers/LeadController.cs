@@ -14,17 +14,15 @@ namespace LeadPilot.Controllers
     {
         private readonly SerLead _serLead;
         private readonly SerLeadSource _serLeadSource;
-        private readonly SerLeadStatus _serLeadStatus;
         private readonly SerEmail _serEmail;
         private readonly IMapper _mapper;
         private readonly string secret;
         private readonly IConfiguration _config;
 
-        public LeadController(SerLead serLead, SerLeadSource serLeadSource, SerLeadStatus serLeadStatus, SerEmail serEmail, IMapper mapper, IConfiguration config)
+        public LeadController(SerLead serLead, SerLeadSource serLeadSource, SerEmail serEmail, IMapper mapper, IConfiguration config)
         {
             _serLead = serLead;
             _serLeadSource = serLeadSource;
-            _serLeadStatus = serLeadStatus;
             _serEmail = serEmail;
             _mapper = mapper;
             _config = config;

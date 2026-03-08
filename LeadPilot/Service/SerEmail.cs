@@ -15,23 +15,20 @@ namespace LeadPilot.Service
         private readonly SerN8n _n8nClient;
         private readonly SerLead _serLead;
         private readonly IConfiguration _config;
-        private readonly string _fromEmail;
-        private readonly string _passKey;
         public SerEmail(LeadPilotDbContext context, SerN8n n8nClient,SerLead serLead, IConfiguration config)
         {
             _context = context;
             _n8nClient = n8nClient;
             _serLead = serLead;
             _config = config;
-            _fromEmail = _config["Email:FromEmail"];
-            _passKey = _config["Email:PassKey"];
         }
 
         private async Task<bool> SendEmail(string subject,string body,string ToEmail)
         {
-            var fromEmail = _fromEmail;
-            var password = _passKey;
-            MailAddress fromAddress = new MailAddress(fromEmail,"Krunal Pagdar");
+            var fromEmail = _config["Email:FromEmail"];
+            var password = _config["Email:PassKey"];
+            var title= _config["Title"];
+            MailAddress fromAddress = new MailAddress(fromEmail, title);
             SmtpClient smtpClient = new SmtpClient();
             smtpClient.Host = "smtp.gmail.com";
             smtpClient.Port = 587;
@@ -55,18 +52,16 @@ namespace LeadPilot.Service
 
         private async Task<bool> AddLeadEmailLog(int leadID,int templateID,EmailTypeEnum emailType)
         {
+            var nextFollowUpDay = Convert.ToInt32(_config["NextFollowUp"]??"5");
             var leadEmailLog = new LeadEmailLog()
             {
                 LeadId = leadID,
                 EmailTemplateId = templateID,
                 MailDate = DateOnly.FromDateTime(DateTime.Now),
-                NextEmailDate = emailType == EmailTypeEnum.Initial ? DateOnly.FromDateTime(DateTime.Now.AddDays(6)) : null
+                NextEmailDate = emailType == EmailTypeEnum.Initial ? DateOnly.FromDateTime(DateTime.Now.AddDays(nextFollowUpDay)) : null
             };
 
             _context.LeadEmailLogs.Add(leadEmailLog);
-
-            var leadDetails = await _context.Leads.Where(x => x.Id == leadID).FirstOrDefaultAsync();
-            leadDetails.StatusId = emailType == EmailTypeEnum.Initial ? (int)LeadStatusEnum.InitialSent : (int)LeadStatusEnum.FollowUpSent;
 
             await _context.SaveChangesAsync();
             return true;

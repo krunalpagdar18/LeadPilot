@@ -5,44 +5,50 @@
 }
 
 <style>
-    .edit{
-        color: #bfa41b !important;
+   
+    .search-box {
+        position: relative;
+        width: 300px;
     }
 
-    .delete{
-        color: #a8271e !important;
-        margin-left:5px;
-        cursor: pointer;
+        .search-box i {
+            position: absolute;
+            left: 275px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #258cfb;
+            cursor: pointer;
+        }
+
+        .search-box input {
+            width: 100%;
+            border: 1px solid #ccc !important;
+            border-radius: 5px !important;
+        }
+
+            .search-box input:focus {
+                border-color: #258cfb !important;
+                box-shadow: none !important;
+            }
+
+    .action-buttons button,
+    .action-buttons a {
+        margin-right: 5px;
+        margin-bottom: 5px;
     }
 
-    .replied {
-        color: #0D6EFD !important;
-        margin-left:5px;
-        cursor: pointer;
+    #LeadDt td {
+        padding: 10px 12px;
     }
-
-    .closed {
-        color: #198754 !important;
-        margin-left: 5px;
-        cursor: pointer;
-    }
-
-
-    .doNotContact {
-        color: #DC3545 !important;
-        margin-left:5px;
-        cursor: pointer;
-    }
-
 
 </style>
 
 <div class="d-flex justify-content-end" style="margin-bottom:10px">
-    <a class="btn btn-primary" href="Lead/CreateLead">Create Lead</a>
+    <a class="btn btn-primary m-md-1" href="Lead/CreateLead">Create Lead</a>
 </div>
 
 <div>
-    <table id="LeadDt">
+    <table id="LeadDt" class="table table-hover align-middle">
         <thead>
             <tr>
                 <th class="d-none">Id</th>
@@ -51,13 +57,14 @@
                 <th class="col-1">City</th>
                 <th class="col-1">Source</th>
                 <th class="col-1">Status</th>
-                <th class="col-1">Action</th>
+                <th class="col-1">Added On</th>
+                <th class="col-2">Action</th>
             </tr>
         </thead>
     </table>
 </div>
 
-@section Scripts{
+@section Scripts {
     <script>
 
         $(document).ready(function(){
@@ -65,16 +72,20 @@
         });
 
         function GetLeadData(){
-            $('#LeadDt').DataTable({
+           var table= $('#LeadDt').DataTable({
                 processing: true,
                 serverSide: true,
+                seraching:false,
+                responsive:true,
+                autowidth:false,
                 ajax:{
                     url:'Lead/GetAllLeads',
                     type:'POST',
                     data:function(d){
                         return {
                             PageIndex:(d.start/d.length)+1,
-                            PageSize:d.length
+                            PageSize:d.length,
+                            SearchText:$('#dtSearch').val()
                         }
                     }
                 },
@@ -84,17 +95,86 @@
                     {data:'emailId'},
                     {data:'city'},
                     {data:'source'},
-                    {data:'status'},
+                            {
+            data:'status',
+            render:function(data){
+                if (data === '@LeadStatusEnum.New')
+            return '<span class="badge bg-info">New</span>';
+
+                if (data === '@LeadStatusEnum.InitialSent')
+            return '<span class="badge bg-primary">Initial Sent</span>';
+
+        if (data === '@LeadStatusEnum.FollowUpSent')
+            return '<span class="badge bg-warning text-dark">Follow-up Sent</span>';
+
+        if (data === '@LeadStatusEnum.Replied')
+            return '<span class="badge bg-success">Replied</span>';
+
+        if (data === '@LeadStatusEnum.Closed')
+            return '<span class="badge bg-secondary">Closed</span>';
+
+        if (data === '@LeadStatusEnum.DoNotContact')
+            return '<span class="badge bg-danger">Do Not Contact</span>';
+
+                return data;
+            }
+        },
+        {
+            data:"addedOn",
+            render:function(data){
+                if(data!=undefined){
+                    let date = new Date(data);
+                    return date.toLocaleDateString('en-GB');
+                }else{
+                    return data;
+                }
+                
+            }
+        },
                     {
                         render:function(data,type,row){
-                            return `<a class="edit" href="Lead/Open?id=`+row.id+`"><i class="fa-solid fa-pen"></i></a>`+
-                                    `<a class="delete" onclick="deleteLead(`+row.id+`)"><i class="fa-solid fa-trash"></i></a>`+
-                                    `<a class="replied" onclick="updateLeadStatus(`+row.id+`,'@LeadStatusEnum.Replied')"><i class="fa-solid fa-envelope-open-text"></i></a>`+
-                                    `<a class="closed" onclick="updateLeadStatus(`+row.id+`,'@LeadStatusEnum.Closed')"><i class="fa-solid fa-circle-check"></i></a>`+
-                                    `<a class="doNotContact" onclick="updateLeadStatus(`+row.id+`,'@LeadStatusEnum.DoNotContact')"><i class="fa-solid fa-ban"></i></a>`;
+                                return `
+        <div class="action-buttons">
+            <a class="btn btn-sm btn-outline-warning" title="Edit" href="Lead/Open?id=${row.id}">
+                <i class="fa-solid fa-pen"></i>
+            </a>
+            <button class="btn btn-sm btn-outline-danger" title="Delete" onclick="deleteLead(${row.id})">
+                <i class="fa-solid fa-trash"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-primary" title="Replied" onclick="updateLeadStatus(${row.id},'@LeadStatusEnum.Replied')">
+                <i class="fa-solid fa-envelope-open-text"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-success" title="Closed" onclick="updateLeadStatus(${row.id},'@LeadStatusEnum.Closed')">
+                <i class="fa-solid fa-circle-check"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-dark"  title="Do not contact" onclick="updateLeadStatus(${row.id},'@LeadStatusEnum.DoNotContact')">
+                <i class="fa-solid fa-ban"></i>
+            </button>
+        </div>
+        `;
                         }
                     }
-                ]
+                ],
+                initComplete:function(){
+                    var api=this.api();
+                    $('#LeadDt_filter').empty();
+                            $('#LeadDt_filter').append(`<div class="d-flex gap-2 mb-3 search-box">
+            <input type="text" id="dtSearch" class="form-control" placeholder="Search">
+            <i class="fa fa-search" id="searchBtn" style=""></i>
+        </div>`)
+
+
+                    $('#LeadDt_filter input')
+                    .on('keypress',function(e){
+                        if(e.which==13){
+                            table.ajax.reload();
+                        }
+                    });
+
+                    $('#LeadDt_filter i').on('click',function(){
+                        table.ajax.reload();
+                    })
+                }
             });
         }
 
@@ -111,8 +191,8 @@
                     }else{
                         alert(data.ErrorMessage)
                     }
-                    
-                    
+
+
                 },
                 error: function (data) {
                     alert('error Occured')

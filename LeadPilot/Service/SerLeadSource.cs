@@ -14,7 +14,7 @@ namespace LeadPilot.Service
 
         public async Task<ResponseViewModel<List<LeadSource>>> GetLeadSource()
         {
-            var leadSource = await _context.LeadSources.ToListAsync();
+            var leadSource = await _context.LeadSources.AsNoTracking().ToListAsync();
             return new ResponseViewModel<List<LeadSource>>(leadSource);
         }
     }
