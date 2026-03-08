@@ -63,7 +63,7 @@ namespace LeadPilot.Service
         {
             var query = _context.Leads.Include(x => x.Source).Include(x => x.Status).AsNoTracking()
                                     .Where(x => x.Inactive == false);
-
+            var totalCount = await query.CountAsync();
             if (!string.IsNullOrEmpty(LeadPageVM.SearchText))
             {
                 var search = $"%{LeadPageVM.SearchText}%";
@@ -90,13 +90,13 @@ namespace LeadPilot.Service
                                         AddedOn=x.AddedOn
                                     }).ToListAsync();
 
-            var totalCount = await query.CountAsync();
+            var filteredCount = await query.CountAsync();
 
             var lstData = new ListViewModel<List<LeadListViewModel>>()
             {
                 data = leadListdata,
                 recordsTotal = totalCount,
-                recordsFiltered = leadListdata?.Count??0
+                recordsFiltered = filteredCount
             };
 
             return new ResponseViewModel<ListViewModel<List<LeadListViewModel>>>(lstData);
