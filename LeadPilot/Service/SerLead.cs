@@ -51,7 +51,7 @@ namespace LeadPilot.Service
 
         public async Task<ResponseViewModel<Lead>> GetLeadByID(int ID)
         {
-            var lead = await _context.Leads.Where(x => x.Id == ID && x.Inactive==false).FirstOrDefaultAsync();
+            var lead = await _context.Leads.AsNoTracking().Where(x => x.Id == ID && x.Inactive==false).FirstOrDefaultAsync();
             if (lead == null)
             {
                 throw new Exception("Lead not found");
@@ -62,7 +62,7 @@ namespace LeadPilot.Service
         public async Task<ResponseViewModel<ListViewModel<List<LeadListViewModel>>>> GetLeads(PaginationViewModel LeadPageVM)
         {
             var query = _context.Leads.Include(x => x.Source).Include(x => x.Status).AsNoTracking()
-                                    .Where(x => x.Inactive == false);
+                                    .Where(x => x.Inactive == false && x.StatusId!=(int)LeadStatusEnum.NotInterested);
             var totalCount = await query.CountAsync();
             if (!string.IsNullOrEmpty(LeadPageVM.SearchText))
             {
@@ -100,6 +100,17 @@ namespace LeadPilot.Service
             };
 
             return new ResponseViewModel<ListViewModel<List<LeadListViewModel>>>(lstData);
+        }
+
+        public async Task<ResponseViewModel<string>> GetLeadStatusByID(int leadID)
+        {
+            var leadStatus=await _context.Leads.AsNoTracking().Include(x=>x.Status).Where(x=>x.Id == leadID && x.Inactive==false).Select(x=>x.Status.Name).FirstOrDefaultAsync();
+            if (string.IsNullOrEmpty(leadStatus))
+            {
+                throw new Exception("Lead not found");
+            }
+
+            return new ResponseViewModel<string>(leadStatus);
         }
     }
 }

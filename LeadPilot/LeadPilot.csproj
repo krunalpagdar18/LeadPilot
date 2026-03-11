@@ -9,6 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\SeedDataConfigurations\LeadPilotDbContext.Partial.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Models\LeadPilotDbContext.Partial.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2">
       <PrivateAssets>all</PrivateAssets>

@@ -3,6 +3,7 @@ using System;
 using LeadPilot.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LeadPilot.Migrations
 {
     [DbContext(typeof(LeadPilotDbContext))]
-    partial class LeadPilotDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260310143836_SeedDataCOnfigurations")]
+    partial class SeedDataCOnfigurations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,26 +67,6 @@ namespace LeadPilot.Migrations
                     b.HasIndex("SouceId");
 
                     b.ToTable("Email_Template", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Active = true,
-                            Body = "<p>Hi@ContactName,</p><p> I came across @FirmName while researching businesses in @City and wanted to reach out.</p><p> Quick question — are you currently exploring ways to improve internal workflows or automate any repetitive processes?</p><p>I build custom tools and automations that help teams save time and reduce manual work.</p><p>No sales pitch — just curious if this is something on your radar.</p><p style = \"margin-top:25px;\">Best regards,  <br/>Krunal</p>",
-                            EmailTypeId = 1,
-                            Name = "Initial",
-                            Subject = "Quick question about your internal workflows"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Active = true,
-                            Body = "<p>Hi@ContactName,</p>\r\n\r\n<p>Just following up on my earlier note.</p>\r\n\r\n<p>If improving internal workflows or operational efficiency is on your roadmap, I’d be happy to explore whether there’s a good fit.</p>\r\n\r\n<p style=\"margin-top:25px;\">\r\nBest regards,<br/>\r\nKrunal Pagdar<br/>\r\nFull-Stack Developer (.NET | Azure)\r\n</p>",
-                            EmailTypeId = 2,
-                            Name = "FollowUp",
-                            Subject = "Following up"
-                        });
                 });
 
             modelBuilder.Entity("LeadPilot.Models.EmailType", b =>
@@ -108,20 +91,6 @@ namespace LeadPilot.Migrations
                         .HasName("Email_Type_pkey");
 
                     b.ToTable("Email_Type", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Active = true,
-                            Name = "Initial"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Active = true,
-                            Name = "Followup"
-                        });
                 });
 
             modelBuilder.Entity("LeadPilot.Models.Lead", b =>
@@ -248,20 +217,6 @@ namespace LeadPilot.Migrations
                         .HasName("Lead_Source_pkey");
 
                     b.ToTable("Lead_Source", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Active = true,
-                            Name = "Google Map"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Active = true,
-                            Name = "HotFrog"
-                        });
                 });
 
             modelBuilder.Entity("LeadPilot.Models.LeadStatus", b =>

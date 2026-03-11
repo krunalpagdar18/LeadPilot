@@ -8,5 +8,6 @@
         Replied= 9,
         Closed= 10,
         DoNotContact= 11,
+        NotInterested = 12,
     }
 }

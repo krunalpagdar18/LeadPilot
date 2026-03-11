@@ -129,5 +129,35 @@ namespace LeadPilot.Controllers
                 throw new Exception("Invalid Status");
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> GetLeadStatus([FromQuery] int Id)
+        {
+            var IncomingSecret = Request.Headers["x-leadpilot-secret"].ToString();
+            if (IncomingSecret != secret)
+            {
+                return Unauthorized();
+            }
+
+            var leadDetails = await _serLead.GetLeadStatusByID(Id);
+            return Ok(new {status=leadDetails});
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> MarkAsNotInterested([FromQuery] int Id)
+        {
+            var IncomingSecret = Request.Headers["x-leadpilot-secret"].ToString();
+            if (IncomingSecret != secret)
+            {
+                return Unauthorized();
+            }
+
+            var leadDetails=await _serLead.GetLeadByID(Id);
+            leadDetails.responseData.StatusId = (int)LeadStatusEnum.Closed;
+            await _serLead.UpdateLead(leadDetails.responseData);
+            return Ok();
+
+        }
     }
 }

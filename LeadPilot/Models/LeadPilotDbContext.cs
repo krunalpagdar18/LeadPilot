@@ -73,6 +73,18 @@ public partial class LeadPilotDbContext : DbContext
 
             entity.ToTable("Lead");
 
+            entity.HasIndex(e => e.Inactive, "IDX_Inactive").HasAnnotation("Npgsql:StorageParameter:deduplicate_items", "true");
+
+            entity.HasIndex(e => e.StatusId, "IDX_Status").HasAnnotation("Npgsql:StorageParameter:deduplicate_items", "true");
+
+            entity.HasIndex(e => e.AddedOn, "Idx_Addedon")
+                .IsDescending()
+                .HasAnnotation("Npgsql:StorageParameter:deduplicate_items", "true");
+
+            entity.HasIndex(e => e.Website, "Uni_Website").IsUnique();
+
+            entity.HasIndex(e => e.SourceId, "idx_Source").HasAnnotation("Npgsql:StorageParameter:deduplicate_items", "true");
+
             entity.Property(e => e.Id)
                 .UseIdentityAlwaysColumn()
                 .HasColumnName("ID");
@@ -137,47 +149,7 @@ public partial class LeadPilotDbContext : DbContext
                 .HasColumnName("ID");
             entity.Property(e => e.Active).HasDefaultValue(true);
         });
-
-        #region Seed Data
-        modelBuilder.Entity<EmailType>().HasData(
-            new EmailType() { Id=1,Name= "Initial",Active=true},
-            new EmailType() { Id=2,Name= "Followup", Active=true}
-           );
-
-        modelBuilder.Entity<LeadSource>().HasData(
-            new LeadSource() {Id=1,Name= "Google Map",Active=true },
-            new LeadSource() {Id=2,Name= "HotFrog", Active=true }
-            );
-
-        modelBuilder.Entity<LeadStatus>().HasData(
-            new LeadStatus() { Id=6,Name= "New" ,Active=true},
-            new LeadStatus() { Id=7,Name= "InitialSent", Active=true},
-            new LeadStatus() { Id=8,Name= "FollowUpSent", Active=true},
-            new LeadStatus() { Id=9,Name= "Replied", Active=true},
-            new LeadStatus() { Id=10,Name= "Closed", Active=true},
-            new LeadStatus() { Id=11,Name= "DoNotContact", Active=true}
-            );
-
-        modelBuilder.Entity<EmailTemplate>().HasData(
-            new EmailTemplate() { Id=1,Name= "Initial",
-                EmailTypeId=1,Subject= "Quick question about your internal workflows",
-                    Body= "<p>Hi@ContactName,</p><p> I came across @FirmName while researching businesses in @City and wanted to reach out.</p><p> Quick question — are you currently exploring ways to improve internal workflows or automate any repetitive processes?</p><p>I build custom tools and automations that help teams save time and reduce manual work.</p><p>No sales pitch — just curious if this is something on your radar.</p><p style = \"margin-top:25px;\">Best regards,  <br/>Krunal</p>",
-                Active=true,SouceId=null
-                },
-            new EmailTemplate()
-            {
-                Id = 3,
-                Name = "FollowUp",
-                EmailTypeId = 2,
-                Subject = "Following up",
-                Body = "<p>Hi@ContactName,</p>\r\n\r\n<p>Just following up on my earlier note.</p>\r\n\r\n<p>If improving internal workflows or operational efficiency is on your roadmap, I’d be happy to explore whether there’s a good fit.</p>\r\n\r\n<p style=\"margin-top:25px;\">\r\nBest regards,<br/>\r\nKrunal Pagdar<br/>\r\nFull-Stack Developer (.NET | Azure)\r\n</p>",
-                Active = true,
-                SouceId = null
-            }
-            );
-        #endregion
-
-
+       
         OnModelCreatingPartial(modelBuilder);
     }
 
