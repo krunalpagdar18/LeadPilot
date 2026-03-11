@@ -2,6 +2,7 @@
 using LeadPilot.Models;
 using LeadPilot.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace LeadPilot.Service
 {
@@ -19,9 +20,21 @@ namespace LeadPilot.Service
             lead.AddedOn = DateOnly.FromDateTime(DateTime.Now);
             lead.Inactive = false;
             var newLead = _context.Leads.Add(lead);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex) 
+            {
+                if(ex.InnerException is PostgresException pgEx && pgEx.SqlState == "23505")
+                {
+                    return new ResponseViewModel<Lead>("A record with this website already exists", new Exception("A record with this website already exists"));
+                }
+                throw;
+            }
 
             return new ResponseViewModel<Lead>(newLead.Entity);
+
         }
 
         public async Task<ResponseViewModel<string>> UpdateLead(Lead lead)

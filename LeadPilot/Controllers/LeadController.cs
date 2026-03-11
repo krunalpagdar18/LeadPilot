@@ -154,7 +154,7 @@ namespace LeadPilot.Controllers
             }
 
             var leadDetails=await _serLead.GetLeadByID(Id);
-            leadDetails.responseData.StatusId = (int)LeadStatusEnum.Closed;
+            leadDetails.responseData.StatusId = (int)LeadStatusEnum.NotInterested;
             await _serLead.UpdateLead(leadDetails.responseData);
             return Ok();
 
