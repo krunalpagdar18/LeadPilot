@@ -337,3 +337,183 @@ BEGIN
 END $EF$;
 COMMIT;
 
+START TRANSACTION;
+
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20260302141548_InitialEMailTemplateMigration') THEN
+    UPDATE "Email_Template" SET "Body" = '<p>Hi@ContactName,</p>< p > I came across @FirmName while researching businesses in @City and wanted to reach out.</ p >< p > Quick question — are you currently exploring ways to improve internal workflows or automate any repetitive processes?</p><p>I build custom tools and automations that help teams save time and reduce manual work.</p><p>No sales pitch — just curious if this is something on your radar.</p><p style = "margin-top:25px;">Best regards,  <br/>Krunal</p>', "Name" = 'Initial', "SouceID" = NULL
+    WHERE "ID" = 1;
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20260302141548_InitialEMailTemplateMigration') THEN
+    INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+    VALUES ('20260302141548_InitialEMailTemplateMigration', '8.0.2');
+    END IF;
+END $EF$;
+COMMIT;
+
+START TRANSACTION;
+
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20260302142937_CorrectedInitialEmailTemplate') THEN
+    DELETE FROM "Email_Template"
+    WHERE "ID" = 2;
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20260302142937_CorrectedInitialEmailTemplate') THEN
+    UPDATE "Email_Template" SET "Body" = '<p>Hi@ContactName,</p><p> I came across @FirmName while researching businesses in @City and wanted to reach out.</p><p> Quick question — are you currently exploring ways to improve internal workflows or automate any repetitive processes?</p><p>I build custom tools and automations that help teams save time and reduce manual work.</p><p>No sales pitch — just curious if this is something on your radar.</p><p style = "margin-top:25px;">Best regards,  <br/>Krunal</p>'
+    WHERE "ID" = 1;
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20260302142937_CorrectedInitialEmailTemplate') THEN
+    INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+    VALUES ('20260302142937_CorrectedInitialEmailTemplate', '8.0.2');
+    END IF;
+END $EF$;
+COMMIT;
+
+START TRANSACTION;
+
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20260306113528_LeadUpdate_DeleteChanges') THEN
+    ALTER TABLE "Lead" ADD "Inactive" boolean NOT NULL DEFAULT FALSE;
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20260306113528_LeadUpdate_DeleteChanges') THEN
+    ALTER TABLE "Lead" ADD "InactiveDate" timestamp without time zone;
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20260306113528_LeadUpdate_DeleteChanges') THEN
+    INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+    VALUES ('20260306113528_LeadUpdate_DeleteChanges', '8.0.2');
+    END IF;
+END $EF$;
+COMMIT;
+
+START TRANSACTION;
+
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20260310114132_AddedUniqueContraintsAndAppliedIndexes') THEN
+    DROP INDEX "IX_Lead_SourceID";
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20260310114132_AddedUniqueContraintsAndAppliedIndexes') THEN
+    DROP INDEX "IX_Lead_StatusID";
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20260310114132_AddedUniqueContraintsAndAppliedIndexes') THEN
+    CREATE INDEX "Idx_Addedon" ON "Lead" ("AddedOn" DESC) WITH (deduplicate_items='true');
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20260310114132_AddedUniqueContraintsAndAppliedIndexes') THEN
+    CREATE INDEX "IDX_Inactive" ON "Lead" ("Inactive") WITH (deduplicate_items='true');
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20260310114132_AddedUniqueContraintsAndAppliedIndexes') THEN
+    CREATE INDEX "idx_Source" ON "Lead" ("SourceID") WITH (deduplicate_items='true');
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20260310114132_AddedUniqueContraintsAndAppliedIndexes') THEN
+    CREATE INDEX "IDX_Status" ON "Lead" ("StatusID") WITH (deduplicate_items='true');
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20260310114132_AddedUniqueContraintsAndAppliedIndexes') THEN
+    CREATE UNIQUE INDEX "Uni_Website" ON "Lead" ("Website");
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20260310114132_AddedUniqueContraintsAndAppliedIndexes') THEN
+    INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+    VALUES ('20260310114132_AddedUniqueContraintsAndAppliedIndexes', '8.0.2');
+    END IF;
+END $EF$;
+COMMIT;
+
+START TRANSACTION;
+
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20260310143836_SeedDataCOnfigurations') THEN
+    INSERT INTO "Lead_Status" ("ID", "Active", "Name")
+    OVERRIDING SYSTEM VALUE
+    VALUES (12, TRUE, 'NotInterested');
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20260310143836_SeedDataCOnfigurations') THEN
+    PERFORM setval(
+        pg_get_serial_sequence('"Lead_Status"', 'ID'),
+        GREATEST(
+            (SELECT MAX("ID") FROM "Lead_Status") + 1,
+            nextval(pg_get_serial_sequence('"Lead_Status"', 'ID'))),
+        false);
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20260310143836_SeedDataCOnfigurations') THEN
+    INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+    VALUES ('20260310143836_SeedDataCOnfigurations', '8.0.2');
+    END IF;
+END $EF$;
+COMMIT;
+
+START TRANSACTION;
+
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20260310144621_SeedDataConfigurationsForAllEntities') THEN
+    INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+    VALUES ('20260310144621_SeedDataConfigurationsForAllEntities', '8.0.2');
+    END IF;
+END $EF$;
+COMMIT;
+
