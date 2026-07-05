@@ -1,7 +1,7 @@
 # LeadPilot
 
 ![.NET 8](https://img.shields.io/badge/.NET-8-512BD4?style=flat&logo=dotnet&logoColor=white)
-![SQL Server](https://img.shields.io/badge/SQL%20Server-CC2927?style=flat&logo=microsoft-sql-server&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white)
 ![n8n](https://img.shields.io/badge/n8n-FF6C37?style=flat&logo=n8n&logoColor=white)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?style=flat&logo=bootstrap&logoColor=white)
 ![jQuery](https://img.shields.io/badge/jQuery-0769AD?style=flat&logo=jquery&logoColor=white)
@@ -27,7 +27,7 @@ sequenceDiagram
     autonumber
     actor User as Sales Agent
     participant App as LeadPilot Web App
-    participant DB as SQL Server
+    participant DB as PostgreSQL
     participant SMTP as SMTP Relay
     participant n8n as n8n Automation Engine
 
@@ -71,7 +71,7 @@ sequenceDiagram
 ## 🛠 Tech Stack
 
 * **Backend**: ASP.NET Core 8.0 (MVC pattern), Entity Framework Core (Database-first mapping).
-* **Database**: Microsoft SQL Server.
+* **Database**: PostgreSQL.
 * **Frontend**: Vanilla CSS (Custom Glassmorphism Design System), Bootstrap 5, jQuery, DataTables.net, Chart.js.
 * **Integrations & Alerts**: SweetAlert2 (Dark theme popups), SMTP mail relay, n8n Webhooks.
 

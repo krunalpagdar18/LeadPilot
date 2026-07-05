@@ -18,7 +18,7 @@ This document logs critical architectural decisions made during the design of Le
 LeadPilot requires delayed, multi-stage communication schedules (e.g. waiting 5 days, sending follow-up, waiting another 5 days, checking response). Implementing this requires a job scheduling mechanism that can handle long-running delay states.
 
 ### Options Considered
-1. **Hangfire**: A popular C# background job scheduler that saves state in SQL Server/Redis.
+1. **Hangfire**: A popular C# background job scheduler that saves state in PostgreSQL/Redis.
 2. **Custom Job Scheduler**: A background worker thread (`BackgroundService`) querying database timestamps.
 3. **n8n Workflow Engine**: An external Node-based visual automation platform.
 

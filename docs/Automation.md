@@ -11,7 +11,6 @@ LeadPilot utilizes an automated asynchronous communication engine driven by **n8
 ## 1. Webhook Security
 All automated API endpoints exposed in LeadPilot for the n8n orchestrator are protected via header-based shared secret validation:
 * **Header Key**: `x-leadpilot-secret`
-* **Configuration**: Verified against the `N8N:WebhookSecret` key in the application's configuration.
 * **Access**: Actions (`TriggerFollowup`, `GetLeadStatus`, `MarkAsNotInterested`) require anonymous accessibility settings in ASP.NET Core, but will immediately reject requests (returning `401 Unauthorized`) if the secret key doesn't match.
 
 ---

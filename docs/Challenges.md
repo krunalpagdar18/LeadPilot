@@ -44,7 +44,7 @@ We designed the controller actions and service methods to perform safe, state-in
 ## 4. Large-Scale DataTable Server-Side Pagination
 
 ### Challenge
-Displaying thousands of leads on a web page degrades browser rendering performance. Returning all records from SQL Server also impacts database memory and query response times.
+Displaying thousands of leads on a web page degrades browser rendering performance. Returning all records from PostgreSQL also impacts database memory and query response times.
 
 ### Solution
 * **Server-Side Processing**: We configured jQuery DataTables to run in `serverSide: true` mode. The grid sends pagination coordinates (`PageIndex`, `PageSize`, `SearchText`, `StatusId`) to the server.

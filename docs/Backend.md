@@ -2,7 +2,7 @@
 
 ![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-8.0-512BD4?style=flat&logo=dotnet&logoColor=white)
 ![Entity Framework Core](https://img.shields.io/badge/EF%20Core-8.0-512BD4?style=flat&logo=dotnet&logoColor=white)
-![SQL Server](https://img.shields.io/badge/SQL%20Server-CC2927?style=flat&logo=microsoft-sql-server&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white)
 ![Security](https://img.shields.io/badge/Security-PBKDF2--SHA256-success?style=flat)
 
 This document covers the database configuration, authentication security details, and API endpoint structure of the LeadPilot backend.
@@ -10,10 +10,10 @@ This document covers the database configuration, authentication security details
 ---
 
 ## 1. Database Mapping (EF Core DB-First)
-LeadPilot maps to a Microsoft SQL Server database using EF Core Database-First generation. Major entities include:
+LeadPilot maps to a PostgreSQL database using EF Core Database-First generation. Major entities include:
 * **User**: Represents CRM agents. Stores usernames, emails, and cryptographically hashed passwords.
 * **Lead**: Main record holding the client company details, email addresses, source tracking, creation date, status flags, and ownership reference (`UserId`).
-* **LeadSource**: Dictionary lookup containing possible source tags (e.g. Email, Referrals, Cold Calls).
+* **LeadSource**: Dictionary lookup containing the external platforms where the lead was discovered (e.g., Google Maps, Hotfrog, etc.).
 * **LeadStatus**: Workflow status metadata.
 
 All queries are scoped to the authenticated user ID (`UserId`) to prevent unauthorized cross-tenant data leaks.
