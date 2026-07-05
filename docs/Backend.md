@@ -1,5 +1,10 @@
 # Backend Architecture & Security
 
+![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-8.0-512BD4?style=flat&logo=dotnet&logoColor=white)
+![Entity Framework Core](https://img.shields.io/badge/EF%20Core-8.0-512BD4?style=flat&logo=dotnet&logoColor=white)
+![SQL Server](https://img.shields.io/badge/SQL%20Server-CC2927?style=flat&logo=microsoft-sql-server&logoColor=white)
+![Security](https://img.shields.io/badge/Security-PBKDF2--SHA256-success?style=flat)
+
 This document covers the database configuration, authentication security details, and API endpoint structure of the LeadPilot backend.
 
 ---

@@ -1,5 +1,9 @@
 # Lead Pilot Automation & n8n Workflow
 
+![n8n](https://img.shields.io/badge/n8n-FF6C37?style=flat&logo=n8n&logoColor=white)
+![Webhooks](https://img.shields.io/badge/Webhooks-Asynchronous-informational?style=flat)
+![SMTP](https://img.shields.io/badge/SMTP-Mail%20Relay-blue?style=flat)
+
 LeadPilot utilizes an automated asynchronous communication engine driven by **n8n** webhooks. This architecture ensures zero-maintenance lead engagement and follow-up loops.
 
 ---

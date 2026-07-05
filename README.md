@@ -1,5 +1,11 @@
 # LeadPilot
 
+![.NET 8](https://img.shields.io/badge/.NET-8-512BD4?style=flat&logo=dotnet&logoColor=white)
+![SQL Server](https://img.shields.io/badge/SQL%20Server-CC2927?style=flat&logo=microsoft-sql-server&logoColor=white)
+![n8n](https://img.shields.io/badge/n8n-FF6C37?style=flat&logo=n8n&logoColor=white)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?style=flat&logo=bootstrap&logoColor=white)
+![jQuery](https://img.shields.io/badge/jQuery-0769AD?style=flat&logo=jquery&logoColor=white)
+
 LeadPilot is a modern, secure, and mobile-responsive CRM platform designed to streamline lead acquisition, pipeline tracking, and automated communications. Built using ASP.NET Core 8.0 MVC, Entity Framework Core, and powered by an automated **n8n** orchestration engine, it features a glassmorphic dark-theme interface tailored for both desktop grids and mobile card viewports.
 
 ---

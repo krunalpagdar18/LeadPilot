@@ -1,10 +1,18 @@
 # Architectural Decision Log
 
+![ADR](https://img.shields.io/badge/ADR-001--n8n--vs--Hangfire-brightgreen?style=flat)
+![Status](https://img.shields.io/badge/Status-Accepted-success?style=flat)
+
 This document logs critical architectural decisions made during the design of LeadPilot.
 
 ---
 
 ## ADR 001: Choosing n8n over Hangfire / Custom Job Schedulers
+
+* **Status**: Accepted
+* **Date**: 2026-07-05
+* **Decided By**: Architecture Lead
+* **Tags**: `#infrastructure` `#backend` `#automation` `#scheduling`
 
 ### Context
 LeadPilot requires delayed, multi-stage communication schedules (e.g. waiting 5 days, sending follow-up, waiting another 5 days, checking response). Implementing this requires a job scheduling mechanism that can handle long-running delay states.

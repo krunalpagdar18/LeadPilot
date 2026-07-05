@@ -1,5 +1,9 @@
 # Technical Challenges & Solutions
 
+![CSS](https://img.shields.io/badge/CSS-Glassmorphism-blue?style=flat&logo=css3&logoColor=white)
+![Chart.js](https://img.shields.io/badge/Chart.js-FF6384?style=flat&logo=chartdotjs&logoColor=white)
+![Performance](https://img.shields.io/badge/Performance-Optimized-brightgreen?style=flat)
+
 This document details the engineering challenges encountered during the development of LeadPilot and the solutions implemented.
 
 ---
